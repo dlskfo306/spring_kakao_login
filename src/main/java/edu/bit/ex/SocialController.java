@@ -41,7 +41,7 @@ public class SocialController {
         System.out.println("code" + code);
 
         kakaoService.getKakaoTokenInfo(code);
-        return "social/flogin";
+        return "social/login2";
 
     }
 
