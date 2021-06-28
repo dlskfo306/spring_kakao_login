@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import edu.bit.ex.service.KakaoService;
+import edu.bit.ex.vo.KakaoAuth;
+import edu.bit.ex.vo.KakaoProfile;
 
 /**
  * 네이티브 앱 키 d0802d111306e7b3104dcbbafe10c0d7 REST API 키
@@ -37,11 +39,19 @@ public class SocialController {
     }
 
     @GetMapping("/auth/kakao/callback")
-    public String social1(String code) {
-        System.out.println("code" + code);
+    public String social1(String code, Model model) {
+        //첫번째 단계. 인증코드 받기
+        System.out.println("code : " + code);
 
-        kakaoService.getKakaoTokenInfo(code);
-        return "social/login2";
+        //두번째 단계. 인증코드 받아서 넘기기
+        KakaoAuth kakaoAuth = kakaoService.getKakaoTokenInfo(code);
+        
+        //세번째 프로필 받아오기 
+        KakaoProfile profile = kakaoService.getKakaoProfile(kakaoAuth.getAccess_token());
+        
+        model.addAttribute("user",profile);
+        
+        return "social/social_home";
 
     }
 

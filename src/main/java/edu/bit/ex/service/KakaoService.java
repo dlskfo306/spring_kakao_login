@@ -3,6 +3,7 @@ package edu.bit.ex.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import org.springframework.web.client.RestTemplate;
+
+import com.google.gson.Gson;
+
+import edu.bit.ex.vo.KakaoAuth;
+import edu.bit.ex.vo.KakaoProfile;
 
 /**
 네이티브 앱 키   dc75133bcec7f5dcd194fbdefd15201c
@@ -21,7 +27,7 @@ Admin 키   e27daabdde88445ede171a9e7c59d939
 @Service
 public class KakaoService {
    
-   private final static String K_CLIENT_ID="4c2fd3e1c94fe470cd22f0a9ab93a84a";
+   private final static String K_CLIENT_ID="74ac062503f83a3d8797eb9fab8f5150";
    private final static String K_REDIRECT_URI="http://localhost:8282/ex/auth/kakao/callback";
    
    // requst 요청
@@ -59,7 +65,7 @@ public class KakaoService {
    //}
    private final static String K_TOKEN_URI ="https://kauth.kakao.com/oauth/token"; 
    
-   public void getKakaoTokenInfo(String code) {
+   public KakaoAuth getKakaoTokenInfo(String code) {
       
       // http 요청을 간단하게 해줄 수 있는 클래스
       //Retrofit -> 안드로이드 앱.      
@@ -83,11 +89,62 @@ public class KakaoService {
       //Http 요청하기 - POST 방식으로 - 그리고 response 변수의 응답을 받음.
       ResponseEntity<String> response = restTemplate.postForEntity(K_TOKEN_URI, kakaoTokenRequest, String.class);
       
-      System.out.println(response.getBody());
-      System.out.println(response.getHeaders());
+      System.out.println("getBody() : " + response.getBody());
+      System.out.println("getHeaders() : " + response.getHeaders());
       
+      //http://www.jsonschema2pojo.org/
+      //json->자바코드로
+     
+      //Gson, Json Simple, ObjectMapper 세가지 정도의 클래스가 있음
+      Gson gson = new Gson();
+      if (response.getStatusCode() == HttpStatus.OK) {
+          
+          return gson.fromJson(response.getBody(), KakaoAuth.class);
+      }
+
+      return null;
       
    }
    
+   
+   //프로필 받아오기
+   //curl -v -X GET "https://kapi.kakao.com/v2/user/me" \
+   //-H "Authorization: Bearer {ACCESS_TOKEN}" //Header를 이렇게 만들어라
+   private final static String K_PROFILE_URI = "https://kapi.kakao.com/v2/user/me";
+   
+   public KakaoProfile getKakaoProfile(String accessToken) {
+       
+       // http 요청을 간단하게 해줄 수 있는 클래스   
+       RestTemplate restTemplate = new RestTemplate();
+       
+       //헤더구성 클래스(Set Header)
+       HttpHeaders headers = new HttpHeaders(); 
+       headers.set("Authorization", "Bearer " + accessToken);
+       
+       // Set http entity
+       HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
+       
+       //실제 요청하기
+       //Http 요청하기 - POST 방식으로 - 그리고 response 변수의 응답을 받음.
+       ResponseEntity<String> response = restTemplate.postForEntity(K_PROFILE_URI, request, String.class);
+       
+       System.out.println("getBody() : " + response.getBody());
+       
+       
+       //http://www.jsonschema2pojo.org/
+       //json->자바코드로
+      
+       //Gson, Json Simple, ObjectMapper 세가지 정도의 클래스가 있음
+       
+       
+       Gson gson = new Gson();
+       if (response.getStatusCode() == HttpStatus.OK) {
+           
+           return gson.fromJson(response.getBody(), KakaoProfile.class);
+       }
+
+       return null;
+
+   }
    
 }
