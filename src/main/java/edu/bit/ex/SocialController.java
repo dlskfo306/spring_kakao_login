@@ -9,10 +9,8 @@ import edu.bit.ex.service.KakaoService;
 import edu.bit.ex.vo.KakaoAuth;
 import edu.bit.ex.vo.KakaoProfile;
 
-/**
- * 네이티브 앱 키 d0802d111306e7b3104dcbbafe10c0d7 REST API 키
- * 74ac062503f83a3d8797eb9fab8f5150 JavaScript 키
- * c968061f0d5fdd879a3abdb3c953c709 Admin 키 1bce400298ab0a20ad90c4ac25f19c20
+/*
+ * 74ac062503f83a3d8797eb9fab8f5150 REST API 키
  */
 @Controller
 
