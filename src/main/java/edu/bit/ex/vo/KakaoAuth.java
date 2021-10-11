@@ -12,12 +12,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class KakaoAuth {
-  
-    public String access_token;
     public String token_type;
-    public String refresh_token;
+    public String access_token;
     public Integer expires_in;
-    public String scope;
+    public String refresh_token;
     public Integer refresh_token_expires_in;
- 
+    public String scope;
 }

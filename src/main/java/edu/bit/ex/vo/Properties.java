@@ -12,9 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Properties {
-  
     public String nickname;
-    public String profile_image;
     public String thumbnail_image;
-
+    public String profile_image;
 }

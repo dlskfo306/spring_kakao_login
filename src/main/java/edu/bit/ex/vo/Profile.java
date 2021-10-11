@@ -12,10 +12,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Profile {
-  
     public String nickname;
     public String thumbnail_image_url;
     public String profile_image_url;
     public Boolean is_default_image;
-
 }
