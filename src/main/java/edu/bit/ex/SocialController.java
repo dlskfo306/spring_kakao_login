@@ -54,9 +54,9 @@ public class SocialController {
         KakaoAuth kakaoAuth = kakaoService.getKakaoTokenInfo(code);
         
         //3.프로필 받아오기
-        //KakaoProfile profile = kakaoService.getKakaoProfile(kakaoAuth.getAccess_token());
+        KakaoProfile profile = kakaoService.getKakaoProfile(kakaoAuth.getAccess_token());
         
-        //model.addAttribute("user", profile);
+        model.addAttribute("user", profile);
         
         
         return "social/social_home";

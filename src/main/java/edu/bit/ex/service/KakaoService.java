@@ -125,7 +125,7 @@ public class KakaoService {
     -H "Authorization: Bearer {ACCESS_TOKEN}" //Header를 이렇게 만들어라
     */
     
-    /*
+    
     private final static String K_PROFILE_URI = "https://kapi.kakao.com/v2/user/me";
     
     public KakaoProfile getKakaoProfile(String accessToken) {
@@ -153,6 +153,6 @@ public class KakaoService {
         
         return null;
     }
-    */
+    
     
 }
