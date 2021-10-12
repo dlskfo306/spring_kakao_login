@@ -84,31 +84,33 @@ public class KakaoService {
         //Retrofit -> 안드로이드 앱.   
         RestTemplate restTemplate = new RestTemplate();
         
-        //헤더구성 클래스(Set Header)
+        //헤더구성 클래스(Set Header) / HttpHeader 오브젝트 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         
-        //파라미터 넘기기(Set Parameter)
+        //파라미터 넘기기(Set Parameter) / HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", K_CLIENT_ID);
         params.add("redirect_uri", K_REDIRECT_URI);
         params.add("code", code);
         
-        //set http entity
+        //set http entity / HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
         
         //실제 요청하기
-        //Http 요청하기 - POST 방식으로 - 그리고 response 변수의 응답을 받음.
+        //Http 요청하기 - POST 요청을 보내고 결과로 ResponseEntity로 반환 받는다.
         ResponseEntity<String> response = restTemplate.postForEntity(K_TOKEN_URI, kakaoTokenRequest, String.class);
         
+        //response에서 .getBody()와 .getHeaders()로 HTTP 메세지를 나눠서 확인할 수 있다.
         System.out.println("getBody() : " + response.getBody());
         System.out.println("getHeaders() : " + response.getHeaders());
         
         //http://www.jsonschema2pojo.org/
         //json->자바코드로
        
-        //Gson, Json Simple, ObjectMapper 세가지 정도의 클래스가 있음
+        //gson 라이브러리를 이용해서 Http 통신 결과가 200 OK 일 때
+        //response.getBody()의 JSON 데이터를 KakaoAuth.class에 담는다.
         Gson gson = new Gson();
         if (response.getStatusCode() == HttpStatus.OK) {
             
@@ -133,19 +135,21 @@ public class KakaoService {
         //http 요청을 간단하게 해줄 수 있는 클래스
         RestTemplate restTemplate = new RestTemplate();
         
-        //헤더구성 클래스 (set Header)
+        //헤더구성 클래스(Set Header) / HttpHeader 오브젝트 생성
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
-        
-        //set http entity
+         
+        //set http entity / HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
         
         //실제 요청하기
-        //Http 요청하기 - POST 방식으로 - 그리고 response 변수의 응받을 받음
+        //Http 요청하기 - POST 요청을 보내고 결과로 ResponseEntity로 반환 받는다.
         ResponseEntity<String> response = restTemplate.postForEntity(K_PROFILE_URI, request, String.class);
         
         System.out.println("getBody() : " + response.getBody());
         
+        //gson 라이브러리를 이용해서 Http 통신 결과가 200 OK 일 때
+        //response.getBody()의 JSON 데이터를 KakaoAuth.class에 담는다.
         Gson gson = new Gson();
         if(response.getStatusCode() == HttpStatus.OK) {
             return gson.fromJson(response.getBody(), KakaoProfile.class);
